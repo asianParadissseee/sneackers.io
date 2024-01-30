@@ -2,21 +2,22 @@
   <div>
     <h1>{{ count }}</h1>
     <button @click="increment">+</button>
+    <input @input="onChangeValue"/>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      count: 0
-    }
-  },
-  methods: {
-    increment() {
-      this.count++
-    }
-  }
+<script setup>
+
+import {ref} from "vue";
+
+const count = ref(0)
+
+function onChangeValue(event) {
+  count.value = Number(event.target.value)
+}
+
+function increment() {
+  count.value++
 }
 </script>
 
