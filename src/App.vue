@@ -1,24 +1,14 @@
 <template>
   <div>
-    <h1>{{ count }}</h1>
-    <button @click="increment">+</button>
-    <input @input="onChangeValue"/>
+   <Product title="Кроссы Пума" price="9500" />
+   <Product title="Кроссы Nike" price="10000" />
   </div>
 </template>
 
 <script setup>
+import Product from "@/components/product.vue";
 
-import {ref} from "vue";
 
-const count = ref(0)
-
-function onChangeValue(event) {
-  count.value = Number(event.target.value)
-}
-
-function increment() {
-  count.value++
-}
 </script>
 
 <style lang="scss" scoped>
