@@ -16,8 +16,8 @@ const onClickFavourite = () => {
 <template>
   <div class="grid grid-cols-4 gap-5">
     <Card
-        v-for="(item, id) in items"
-        :key="id"
+        v-for="item in items"
+        :key="item.id"
         :image-url="item.imageUrl"
         :title="item.title"
         :price="item.price"
