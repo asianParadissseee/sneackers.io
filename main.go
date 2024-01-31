@@ -1,19 +1,22 @@
 package main
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/middleware/cors"
+	"github.com/gofiber/fiber/v2"
+	"log"
+)
 
 func main() {
 	app := fiber.New()
+	app.Use(cors.New())
+	api := app.Group("/api")
 
-	app.Get("/", func(ctx *fiber.Ctx) error {
-		return ctx.SendString("Hello, World!")
-	})
-
-	app.Get("/messages", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{
-			"message": "Hello its my message",
+	api.Get("/check", func(ctx *fiber.Ctx) error {
+		return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+			"status":  "success",
+			"message": "Welcome to my api",
 		})
 	})
 
-	app.Listen(":5050")
+	log.Fatal(app.Listen(":8000"))
 }
