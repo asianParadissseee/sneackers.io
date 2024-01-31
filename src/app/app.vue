@@ -6,9 +6,10 @@
           <Title :bold="true" :margin-bottom="8">
             Все кроссовки
           </Title>
-          <Select/>
-          <Input :placeholder="'Поиск...'"/>
-
+          <div class="flex  gap-3">
+            <Select/>
+            <Input :placeholder="'Поиск...'"/>
+          </div>
         </div>
         <CardList/>
       </div>
