@@ -11,7 +11,7 @@
             <Input :placeholder="'Поиск...'"/>
           </div>
         </div>
-        <CardList/>
+        <CardList :items="data"/>
       </div>
     </base-layout>
   </div>
@@ -23,6 +23,39 @@ import {Title} from "@/shared/ui/title/index.js";
 import {CardList} from "@/widgets/card-list/index.js";
 import {Input} from "@/shared/ui/input/index.js";
 import {Select} from "@/shared/ui/select/index.js";
+import {onMounted, ref} from "vue";
+
+const sneakers = ref([])
+
+onMounted()
+
+const data = [
+  {
+    id: 1,
+    title: "Кроссовки Black Puma",
+    price: 9987,
+    imageUrl: "/sneakers/6.jpg"
+  },
+  {
+    id: 2,
+    title: "Кроссовки Black Nike",
+    price: 9987,
+    imageUrl: "/sneakers/1.jpg"
+  },
+  {
+    id: 3,
+    title: "Кроссовки White Adidas",
+    price: 9987,
+    imageUrl: "/sneakers/2.jpg"
+  },
+  {
+    id: 4,
+    title: "Кроссовки Black Puma",
+    price: 9987,
+    imageUrl: "/sneakers/3.jpg"
+  },
+]
+
 </script>
 
 <style scoped>

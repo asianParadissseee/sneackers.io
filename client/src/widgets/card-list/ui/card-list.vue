@@ -1,14 +1,30 @@
 <script setup>
-
 import {Card} from "@/entity/card/index.js";
+
+defineProps({
+  items: Array
+})
+
+const onClickAdd = () => {
+  alert("Add")
+}
+const onClickFavourite = () => {
+  alert("Add")
+}
 </script>
 
 <template>
   <div class="grid grid-cols-4 gap-5">
-    <Card :image-url="`/sneakers/sneakers-1.jpg`" :title="`Мужские кроссы Nike`" :price="1000" :is-added="true"/>
-    <Card :image-url="`/sneakers/sneakers-2.jpg`" :title="`Мужские кроссы Puma`" :price="2000" :is-added/>
-    <Card :image-url="`/sneakers/sneakers-3.jpg`" :title="`Мужские кроссы Adidas`" :price="100000" />
-    <Card :image-url="`/sneakers/sneakers-4.jpg`" :title="`Мужские кроссы Lacoste`" :price="9999"/>
+    <Card
+        v-for="(item, id) in items"
+        :key="id"
+        :image-url="item.imageUrl"
+        :title="item.title"
+        :price="item.price"
+        :is-added="true"
+        :on-click-add="onClickAdd"
+        :on-click-favorite="onClickFavourite"
+    />
   </div>
 </template>
 
