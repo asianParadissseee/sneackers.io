@@ -1,7 +1,7 @@
 <template>
   <Navbar/>
   <div class="flex">
-    <Sidebar/>
+<!--    <Sidebar/>-->
     <slot></slot>
   </div>
 </template>
