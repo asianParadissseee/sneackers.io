@@ -11,7 +11,7 @@
             <SearchQuery :on-change-input="onChangeInput"/>
           </div>
         </div>
-        <CardList :items="items"/>
+        <CardList :items="items" @add-to-favorite="addToFavorite"/>
       </div>
     </base-layout>
   </div>
@@ -21,7 +21,7 @@
 import {BaseLayout} from "./providers/layouts/index.js";
 import {Title} from "@/shared/ui/title/index.js";
 import {CardList} from "@/widgets/card-list/index.js";
-import {onMounted, reactive, ref, watch} from "vue";
+import {onMounted, reactive, ref, watch, provide} from "vue";
 import axios from "axios";
 import {SortItems} from "@/features/sort-items/index.js";
 import {SearchQuery} from "@/features/search-query/index.js";
@@ -33,6 +33,41 @@ const filters = reactive({
   searchQuery: ""
 })
 
+const fetchFavorites = async () => {
+  try {
+    const {data: favoriteData} = await axios.get(`https://480bfc7b3642f183.mokky.dev/favorites`)
+    items.value = items?.value.map(item => {
+      const favorites = favoriteData.find(favorite => favorite.parentId === item.id)
+
+      if (!favorites) {
+        return item
+      }
+      return {
+        ...item,
+        isFavorite: true,
+        favoriteId: favorites.id
+      }
+    })
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+const addToFavorite = async (item) => {
+  if (!item.isFavorite) {
+    const obj = {
+      parentId: item.id
+    }
+    try {
+      const {data} = axios.post(`https://480bfc7b3642f183.mokky.dev/favorites`, obj)
+      item.isFavorite = true
+      console.log(data)
+    } catch (e) {
+
+    }
+  }
+
+}
 
 const fetchItems = async () => {
   try {
@@ -45,12 +80,19 @@ const fetchItems = async () => {
     const {data} = await axios.get(`https://480bfc7b3642f183.mokky.dev/items`, {
       params
     })
-    items.value = data
+    items.value = data.map((obj) => ({
+      ...obj,
+      isFavorite: false,
+      isAdded: false
+    }))
   } catch (e) {
     console.log(e)
   }
 }
-onMounted(fetchItems)
+onMounted(async () => {
+  await fetchItems();
+  await fetchFavorites()
+})
 
 watch(() => filters.sortItems, fetchItems)
 
@@ -61,7 +103,6 @@ const onChangeInput = (e) => {
   console.log(e.target.value)
   filters.searchQuery = e.target.value
 }
-
 </script>
 
 <style scoped>
