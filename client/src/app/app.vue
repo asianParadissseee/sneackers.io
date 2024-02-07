@@ -54,19 +54,20 @@ const fetchFavorites = async () => {
 }
 
 const addToFavorite = async (item) => {
-  if (!item.isFavorite) {
-    const obj = {
-      parentId: item.id
-    }
-    try {
+  try {
+    if (!item.isFavorite) {
+      const obj = {
+        parentId: item.id
+      }
       const {data} = axios.post(`https://480bfc7b3642f183.mokky.dev/favorites`, obj)
       item.isFavorite = true
+      item.favoriteId = data.id
       console.log(data)
-    } catch (e) {
-
     }
-  }
 
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 const fetchItems = async () => {
