@@ -7,7 +7,7 @@
             Все кроссовки
           </Title>
           <div class="flex  gap-3">
-            <Select/>
+            <SortItems  :sort-items="sortItems?.value" :on-change-select="onChangeSelect"/>
             <Input :placeholder="'Поиск...'"/>
           </div>
         </div>
@@ -22,12 +22,12 @@ import {BaseLayout} from "./providers/layouts/index.js";
 import {Title} from "@/shared/ui/title/index.js";
 import {CardList} from "@/widgets/card-list/index.js";
 import {Input} from "@/shared/ui/input/index.js";
-import {Select} from "@/shared/ui/select/index.js";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import axios from "axios";
+import {SortItems} from "@/features/sort-items/index.js";
 
 const items = ref([])
-
+const sortItems = ref("")
 
 onMounted(async () => {
   try {
@@ -38,6 +38,18 @@ onMounted(async () => {
   }
 })
 
+watch(sortItems, async () => {
+  try {
+    const {data} = await axios.get("https://480bfc7b3642f183.mokky.dev/items?sortBy=" + sortItems?.value)
+    items.value = data
+  } catch (e) {
+    console.log(e)
+  }
+})
+
+const onChangeSelect = (e) => {
+  sortItems.value = e.target.value
+}
 
 </script>
 
