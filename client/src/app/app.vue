@@ -24,10 +24,19 @@ import {CardList} from "@/widgets/card-list/index.js";
 import {Input} from "@/shared/ui/input/index.js";
 import {Select} from "@/shared/ui/select/index.js";
 import {onMounted, ref} from "vue";
+import axios from "axios";
 
 const items = ref([])
 
-onMounted()
+
+onMounted(async () => {
+  try {
+    const {data} = await axios.get("https://480bfc7b3642f183.mokky.dev/items")
+    items.value = data
+  } catch (e) {
+    console.log(e)
+  }
+})
 
 
 </script>
