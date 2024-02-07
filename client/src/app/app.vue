@@ -22,12 +22,15 @@ import {BaseLayout} from "./providers/layouts/index.js";
 import {Title} from "@/shared/ui/title/index.js";
 import {CardList} from "@/widgets/card-list/index.js";
 import {Input} from "@/shared/ui/input/index.js";
-import {onMounted, ref, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import axios from "axios";
 import {SortItems} from "@/features/sort-items/index.js";
 
 const items = ref([])
-const sortItems = ref("")
+
+const filters = reactive({
+  sortItems: ""
+})
 
 onMounted(async () => {
   try {
@@ -38,9 +41,9 @@ onMounted(async () => {
   }
 })
 
-watch(sortItems, async () => {
+watch(()=> filters.sortItems, async () => {
   try {
-    const {data} = await axios.get("https://480bfc7b3642f183.mokky.dev/items?sortBy=" + sortItems?.value)
+    const {data} = await axios.get("https://480bfc7b3642f183.mokky.dev/items?sortBy=" + filters.sortItems)
     items.value = data
   } catch (e) {
     console.log(e)
@@ -48,7 +51,7 @@ watch(sortItems, async () => {
 })
 
 const onChangeSelect = (e) => {
-  sortItems.value = e.target.value
+  filters.sortItems = e.target.value
 }
 
 </script>
