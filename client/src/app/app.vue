@@ -59,12 +59,15 @@ const addToFavorite = async (item) => {
       const obj = {
         parentId: item.id
       }
-      const {data} = axios.post(`https://480bfc7b3642f183.mokky.dev/favorites`, obj)
       item.isFavorite = true
+      const {data} = axios.post(`https://480bfc7b3642f183.mokky.dev/favorites`, obj)
       item.favoriteId = data.id
       console.log(data)
+    } else {
+      item.isFavorite = false
+      await axios.delete(`https://480bfc7b3642f183.mokky.dev/favorites/${item.favoriteId}`)
+      item.favoriteId = null
     }
-
   } catch (e) {
     console.log(e)
   }
@@ -84,6 +87,7 @@ const fetchItems = async () => {
     items.value = data.map((obj) => ({
       ...obj,
       isFavorite: false,
+      favoriteId: null,
       isAdded: false
     }))
   } catch (e) {
