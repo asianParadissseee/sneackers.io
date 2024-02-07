@@ -7,8 +7,8 @@
             Все кроссовки
           </Title>
           <div class="flex  gap-3">
-            <SortItems  :sort-items="sortItems?.value" :on-change-select="onChangeSelect"/>
-            <Input :placeholder="'Поиск...'"/>
+            <SortItems :sort-items="filters.sortItems" :on-change-select="onChangeSelect"/>
+            <SearchQuery :on-change-input="onChangeInput"/>
           </div>
         </div>
         <CardList :items="items"/>
@@ -21,37 +21,45 @@
 import {BaseLayout} from "./providers/layouts/index.js";
 import {Title} from "@/shared/ui/title/index.js";
 import {CardList} from "@/widgets/card-list/index.js";
-import {Input} from "@/shared/ui/input/index.js";
 import {onMounted, reactive, ref, watch} from "vue";
 import axios from "axios";
 import {SortItems} from "@/features/sort-items/index.js";
+import {SearchQuery} from "@/features/search-query/index.js";
 
 const items = ref([])
 
 const filters = reactive({
-  sortItems: ""
+  sortItems: "title",
+  searchQuery: ""
 })
 
-onMounted(async () => {
+
+const fetchItems = async () => {
   try {
-    const {data} = await axios.get("https://480bfc7b3642f183.mokky.dev/items")
+    const params = {
+      sortBy: filters.sortItems,
+    }
+    if (filters.searchQuery) {
+      params.title = `*${filters.searchQuery}*`
+    }
+    const {data} = await axios.get(`https://480bfc7b3642f183.mokky.dev/items`, {
+      params
+    })
     items.value = data
   } catch (e) {
     console.log(e)
   }
-})
+}
+onMounted(fetchItems)
 
-watch(()=> filters.sortItems, async () => {
-  try {
-    const {data} = await axios.get("https://480bfc7b3642f183.mokky.dev/items?sortBy=" + filters.sortItems)
-    items.value = data
-  } catch (e) {
-    console.log(e)
-  }
-})
+watch(() => filters.sortItems, fetchItems)
 
 const onChangeSelect = (e) => {
   filters.sortItems = e.target.value
+}
+const onChangeInput = (e) => {
+  console.log(e.target.value)
+  filters.searchQuery = e.target.value
 }
 
 </script>
